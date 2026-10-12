@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Біологічно активні речовини — Інтерактивна гра (Балан 9 клас)</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 650px; margin: 30px auto; padding: 20px; background-color: #f4f7f6; color: #333; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        h1, h2 { color: #2c3e50; text-align: center; }
+        .info-block { display: flex; justify-content: space-around; margin: 20px 0; background: #eef2f3; padding: 15px; border-radius: 8px; font-weight: bold; }
+        .question { display: none; }
+        .question.active { display: block; }
+        .options label { display: block; background: #f9f9f9; padding: 12px; margin: 8px 0; border: 2px solid #e0e0e0; border-radius: 6px; cursor: pointer; transition: 0.2s; }
+        .options label:hover { background: #edf2f7; border-color: #3498db; }
+        .options input { margin-right: 10px; }
+        .input-group { margin: 15px 0; }
+        .input-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .input-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        button { background-color: #3498db; color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; width: 100%; font-weight: bold; transition: 0.2s; }
+        button:hover { background-color: #2980b9; }
+        .btn-next { background-color: #2ecc71; margin-top: 15px; }
+        .btn-next:hover { background-color: #27ae60; }
+        .progress { text-align: center; margin-bottom: 15px; color: #7f8c8d; font-size: 14px; }
+        #result-screen { text-align: center; display: none; }
+        .score-display { font-size: 48px; color: #2ecc71; font-weight: bold; margin: 20px 0; }
+        #status-message { font-weight: bold; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+    <!-- Екран реєстрації та старту -->
+    <div id="start-screen" class="card">
+        <h1>🧬 Біологічно активні речовини</h1>
+        <p style="text-align: center; color: #666;">Інтерактивний тест за підручником Біологія 9 клас (П. Балан)</p>
+        
+        <div class="info-block">
+            <div>📝 16 запитань</div>
+            <div>🏆 Макс: 16 балів</div>
+            <div>🤖 Автоперевірка</div>
+        </div>
+
+        <div class="input-group">
+            <label for="studentName">Прізвище та Ім'я учня:</label>
+            <input type="text" id="studentName" placeholder="Наприклад: Марія Ковальчук" required>
+        </div>
+        <div class="input-group">
+            <label for="studentClass">Клас:</label>
+            <input type="text" id="studentClass" placeholder="Наприклад: 9-Б" required>
+        </div>
+
+        <button type="button" onclick="startGame()">Почати гру</button>
+    </div>
+
+    <!-- Екран тестування -->
+    <div id="quiz-screen" class="card" style="display: none;">
+        <div class="progress" id="progress-text">Запитання 1 із 16 | Балів: 0</div>
+        
+        <form id="quizForm">
+            <!-- 1-12 запитання (вітаміни, гормони, ферменти за Баланом) -->
+            <div class="question active" data-correct="А">
+                <h2>1. Яка головна особливість дії біологічно активних речовин (БАР) на організм людини?</h2>
+                <div class="options">
+                    <label><input type="radio" name="q1" value="А"> А) Вони ефективні у надзвичайно малих кількостях (мікродозах)</label>
+                    <label><input type="radio" name="q1" value="Б"> Б) Вони виконують виключно енергетичну функцію в клітині</label>
+                    <label><input type="radio" name="q1" value="В"> В) Вони є основним будівельним матеріалом клітинних мембран</label>
+                </div>
+            </div>
+
+            <div class="question" data-correct="Б">
+                <h2>2. Як називаються біологічно активні речовини білкової природи, які виконують роль біокаталізаторів?</h2>
+                <div class="options">
+                    <label><input type="radio" name="q2" value="А"> А) Гормони</label>
+                    <label><input type="radio" name="q2" value="Б"> Б) Ферменти (ензими)</label>
+                    <label><input type="radio" name="q2" value="В"> В) Фітонциди</label>
+                </div>
+            </div>
+
+            <div class="question" data-correct="В">
+                <h2>3. Де в організмі людини зазвичай діють ферменти для забезпечення процесів метаболізму?</h2>
+                <div class="options">
+                    <label><input type="radio" name="q3" value="А"> А) Транспортуються виключно кров'ю до інших органів</label>
+                    <label><input type="radio" name="q3" value="Б"> Б) Виділяються в навколишнє середовище</label>
+                    <label><input type="radio" name="q3" value="В"> В) Діють усередині клітин або у порожнинах органів травлення</label>
+                </div>
+            </div>
+
+            <div class="question" data-correct="А">
+                <h2>4. До якої групи біологічно активних речовин належать інсулін, адреналін та тироксин?</h2>
+                <div class="options">
+                    <label><input type="radio" name="q4" value="А"> А) Гормони</label>
+                    <label><input type="radio" name="q4" value="Б"> Б) Вітаміни</label>
+                    <label><input type="radio" name="q4" value="В"> В) Антибіотики</label>
+                </div>
+            </div>
+
+            <div class="question" data-correct="Б">
+                <h2>5. Які залози виділяють гормони безпосередньо у кров або лімфу, забезпечуючи гуморальну регуляцію?</h2>
+                <div class="options">
+                    <label><input type="radio" name="q5" value="А"> А) Залози зовнішньої секреції (екзокринні)</label>
+                    <label><input type="radio" name="q5" value="Б"> Б) Залози внутрішньої секреції (ендокринні)</label>
+                    <label><input type="radio" name="q5" value="В"> В) Слинні та потові залози</label>
+                </div>
+            </div>
+
+            <div class="question" data-correct="В">
+                <h2>6. Рослинні гормони, що регулюють ріст, поділ клітин, цвітіння та дозрівання плодів у рослин — це:</h2>
+                <div class="options">
+                    <label><input type="radio" name="q6" value="А"> А) Вітаміни</label>
+                    <label><input type="radio" name="q6" value="Б"> Б) Фітонциди</label>
+                    <label><input type="radio" name="q6" value="В"> В) Фітогормони</label>
+                </div>
+            </div>
+
+            <div class="question" data-correct="А">
+                <h2>7. Які речовини рослинного походження мають здатність пригнічувати життєдіяльність хвороботворних мікроорганізмів?</h2>
+                <div class="options">
+                    <label><input type="radio" name="q7" value="А"> А) Фітонциди</label>
+                    <label><input type="radio" name="q7" value="Б"> Б) Ферменти</label>
+                    <label><input type="radio" name="q7" value="В"> В) Вітаміни</label>
+                </div>
+            </div>
+
+            <div class="question" data-correct="Б">
+                <h2>8. Низькомолекулярні органічні сполуки різної хімічної природи, що не синтезуються (або майже не синтезуються) в організмі людини, але необхідні для життя:</h2>
+                <div class="options">
+                    <label><input type="radio" name="q8" value="А"> А) Гормони</label>
+                    <label><input type="radio" name="q8" value="Б"> Б) Вітаміни</label>
+                    <label><input type="radio" name="q8" value="В"> В) Нейромедіатори</label>
+                </div>
+            </div>
+
+            <div class="question" data-correct="В">
+                <h2>9. До якої групи за розчинністю належать вітаміни A, D, E та K?</h2>
+                <div class="options">
+                    <label><input type="radio" name="q9" value="А"> А) Водорозчинні</label>
+                    <label><input type="radio" name="q9" value="Б"> Б) Спирторозчинні</label>
+                    <label><input type="radio" name="q9" value="В"> В) Жиророзчинні</label>
+                </div>
+            </div>
+
+            <div class="question" data-correct="А">
+                <h2>10. Яке захворювання розвивається за повної відсутності певного вітаміну в раціоні харчування?</h2>
+                <div class="options">
+                    <label><input type="radio" name="q10" value="А"> А) Авітаміноз</label>
+                    <label><input type="radio" name="q10" value="Б"> Б) Гіповітаміноз</label>
+                    <label><input type="radio" name="q10" value="В"> В) Гіпервітаміноз</label>
+                </div>
+            </div>
+
+            <div class="question" data-correct="Б">
+                <h2>11. Продуктами життєдіяльності грибів та бактерій, які вибірково пригнічують ріст інших мікроорганізмів, є:</h2>
+                <div class="options">
+                    <label><input type="radio" name="q11" value="А"> А) Фітогормони</label>
+                    <label><input type="radio" name="q11" value="Б"> Б) Антибіотики</label>
+                    <label><input type="radio" name="q11" value="В"> В) Ферменти</label>
+                </div>
+            </div>
+
+            <div class="question" data-correct="В">
+                <h2>12. Біологічно активні речовини, які синтезуються нейронами гіпоталамуса і виділяються у кров через гіпофіз, називаються:</h2>
+                <div class="options">
+                    <label><input type="radio" name="q12" value="А"> А) Фітонциди</label>
+                    <label><input type="radio" name="q12" value="Б"> Б) Ферменти</label>
+                    <label><input type="radio" name="q12" value="В"> В) Нейрогормони</label>
+                </div>
+            </div>
+
+            <!-- БЛОК: НЕЙРОМЕДІАТОРИ ЗА ПІДРУЧНИКОМ БАЛАНА -->
+            <div class="question" data-correct="А">
+                <h2>13. Яка біологічна роль нейромедіаторів в організмі згідно з підручником біології?</h2>
+                <div class="options">
+                    <label><input type="radio" name="q13" value="А"> А) Передають нервовий імпульс між нейронами або від нейрона до робочого органу</label>
+                    <label><input type="radio" name="q13" value="Б"> Б) Знищують хвороботворні бактерії в міжклітинній рідині</label>
+                    <label><input type="radio" name="q13" value="В"> В) Забезпечують клітини енергією під час розщеплення глюкози</label>
+                </div>
+            </div>
+
+            <div class="question" data-correct="Б">
+                <h2>14. Куди саме виділяються молекули нейромедіатора при надходженні нервового імпульсу до кінця аксона?</h2>
+                <div class="options">
+                    <label><input type="radio" name="q14" value="А"> А) Безпосередньо в кровоносне русло</label>
+                    <label><input type="radio" name="q14" value="Б"> Б) У синаптичну щілину</label>
+                    <label><input type="radio" name="q14" value="В"> В) Усередину ядра сусідньої клітини</label>
+                </div>
+            </div>
+
+            <div class="question" data-correct="В">
+                <h2>15. З якими структурами плазматичної мембрани наступної клітини взаємодіє нейромедіатор, щоб згенерувати новий імпульс?</h2>
+                <div class="options">
+                    <label><input type="radio" name="q15" value="А"> А) З молекулами фосфоліпідів</label>
+                    <label><input type="radio" name="q15" value="Б"> Б) З порами клітинної стінки</label>
+                    <label><input type="radio" name="q15" value="В"> В) Зі специфічними білковими рецепторами</label>
+                </div>
+            </div>
+
+            <div class="question" data-correct="А">
+                <h2>16. Які речовини є класичними прикладами нейромедіаторів, що згадуються в курсі біології 9 класу?</h2>
+                <div class="options">
+                    <label><input type="radio" name="q16" value="А"> А) Ацетилхолін та норадреналін</label>
+                    <label><input type="radio" name="q16" value="Б"> Б) Інсулін та глюкагон</label>
+                    <label><input type="radio" name="q16" value="В"> В) Гемоглобін та міоглобін</label>
+                </div>
+            </div>
+
+            <button type="button" class="btn-next" onclick="nextQuestion()">Наступне запитання →</button>
+        </form>
+    </div>
+
+    <!-- Екран результатів -->
+    <div id="result-screen" class="card">
+        <h2>🏁 Гру завершено!</h2>
+        <div class="score-display" id="final-score">0 / 16</div>
+        <p id="status-message">Відправка результатів до таблиці...</p>
+    </div>
+
+    <script>
+        let currentIdx = 0;
+        let score = 0;
+        const questions = document.querySelectorAll('.question');
+        const totalQuestions = questions.length;
+        
+        let studentName = "";
+        let studentClass = "";
+
+        function startGame() {
+            studentName = document.getElementById('studentName').value.trim();
+            studentClass = document.getElementById('studentClass').value.trim();
+
+            if (!studentName || !studentClass) {
+                alert("Будь ласка, введіть своє Прізвище/Ім'я та Клас!");
+                return;
+            }
+
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('quiz-screen').style.display = 'block';
+            updateProgress();
+        }
+
+        function updateProgress() {
+            document.getElementById('progress-text').innerText = `Запитання ${currentIdx + 1} із ${totalQuestions} | Балів: ${score}`;
+        }
+
+        function nextQuestion() {
+            const currentQuestion = questions[currentIdx];
+            const selectedOption = currentQuestion.querySelector('input[type="radio"]:checked');
+
+            if (!selectedOption) {
+                alert("Будь ласка, оберіть один варіант відповіді перед переходом далі!");
+                return;
+            }
+
+            if (selectedOption.value === currentQuestion.getAttribute('data-correct')) {
+                score++;
+            }
+
+            currentQuestion.classList.remove('active');
+            currentIdx++;
+
+            if (currentIdx < totalQuestions) {
+                questions[currentIdx].classList.add('active');
+                updateProgress();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            document.getElementById('quiz-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            document.getElementById('final-score').innerText = `${score} / ${totalQuestions}`;
+
+            const webAppUrl = "https://script.google.com/macros/s/AKfycbyYeRCR69exHpyIANsq1d7um8RtEsu-a2bjuc3b1OSoheGPg30fb87PfZXSFiXrS9HC/exec";
+
+            const formData = new FormData();
+            formData.append("name", studentName);
+            formData.append("class", studentClass);
+            formData.append("score", score);
+            formData.append("total", totalQuestions);
+
+            fetch(webAppUrl, {
+                method: "POST",
+                mode: "no-cors",
+                body: formData
+            })
+            .then(() => {
+                document.getElementById('status-message').innerText = "✅ Результати успішно збережено в Google Таблицю!";
+                document.getElementById('status-message').style.color = "#2ecc71";
+            })
+            .catch(error => {
+                console.error("Помилка відправки даних:", error);
+                document.getElementById('status-message').innerText = "⚠️ Помилка зв'язку. Але результат зафіксовано на екрані!";
+                document.getElementById('status-message').style.color = "#e74c3c";
+            });
+        }
+    </script>
+</body>
+</html>
